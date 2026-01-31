@@ -18,7 +18,7 @@ screen_height = screen_info.current_h
 # Set up the screen
 screen = pygame.display.set_mode((screen_width, screen_height))
 pygame.display.set_caption("EyeGestures v3 example")
-font_size = 48
+font_size = 40
 bold_font = pygame.font.Font(None, font_size)
 bold_font.set_bold(True)  # Set the font to bold
 
@@ -43,13 +43,13 @@ targets = [
 ]
 
 calibration_map = np.column_stack([xx.ravel(), yy.ravel()])
-n_points = min(len(calibration_map),36)
+n_points = min(len(calibration_map), 36)
 np.random.shuffle(calibration_map)
 gestures.uploadCalibrationMap(calibration_map,context="my_context")
 # Decrease the acceptance radius (in pixels) for the calibration target in this context.
 # Default comes from the Calibrator and is usually CALIBRATION_RADIUS/2 (500 with default 1000).
 # Set to a smaller value here to make the calibration acceptance circle tighter.
-gestures.clb["my_context"].acceptance_radius = 80
+gestures.clb["my_context"].acceptance_radius = 50
 gestures.setFixation(1.0)
 # Initialize Pygame
 # Set up colors
@@ -83,9 +83,12 @@ while running:
     # frame = np.rot90(frame)
     frame = np.flip(frame, axis=1)
     calibrate = (iterator <= n_points) # calibrate 36 points
-    event, calibration = gestures.step(frame, calibrate, screen_width, screen_height, context="my_context")
+    try:
+        event, calibration = gestures.step(frame, calibrate, screen_width, screen_height, context="my_context")
+    except:
+        continue
 
-    if event is None:
+    if event is None:   
         continue
 
 
