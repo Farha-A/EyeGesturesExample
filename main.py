@@ -29,10 +29,10 @@ from eyeGestures.utils import VideoCapture
 from eyeGestures import EyeGestures_v3
 
 gestures = EyeGestures_v3()
-cap = VideoCapture(0)
+cap = VideoCapture(1)  # 0 -> built-in camera, 1 -> webcam
 
-x = np.arange(0, 1.1, 0.2)
-y = np.arange(0, 1.1, 0.2)
+x = np.arange(0, 1.1, 0.1)
+y = np.arange(0, 1.1, 0.1)
 
 xx, yy = np.meshgrid(x, y)
 
@@ -43,7 +43,7 @@ targets = [
 ]
 
 calibration_map = np.column_stack([xx.ravel(), yy.ravel()])
-n_points = min(len(calibration_map), 36)
+n_points = min(len(calibration_map), 25)
 np.random.shuffle(calibration_map)
 gestures.uploadCalibrationMap(calibration_map,context="my_context")
 # Decrease the acceptance radius (in pixels) for the calibration target in this context.
